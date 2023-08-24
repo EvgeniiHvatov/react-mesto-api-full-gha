@@ -38,7 +38,7 @@ function App() {
   function handleLogin(email, password) {
     signIn(email, password)
       .then((res) => {
-        localStorage.setItem('jwt', res.token);
+        localStorage.setItem('token', res.token);
         setIsLoggedIn(true);
         setEmailValue(email);
         navigate("/");
@@ -63,7 +63,7 @@ function App() {
 
   function handleLogOut() {
     setIsLoggedIn(false);
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     setEmailValue(null);
     navigate("/signin");
   };
@@ -73,9 +73,9 @@ function App() {
   };
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
-      checkToken(jwt)
+    const token = localStorage.getItem('token');
+    if (token) {
+      checkToken(token)
         .then((res) => {
           if (res) {
             setIsLoggedIn(true);
@@ -178,7 +178,7 @@ function App() {
       console.error(err);
     });
   }
- 
+
 
   function closeAllPopups() {
     setEditProfilePopupOpen(false);
@@ -275,14 +275,14 @@ function App() {
             isLoading = {isLoading}
           />
 
-          <AddPlacePopup 
+          <AddPlacePopup
             isOpen = {isAddPlacePopupOpen}
             onClose = {closeAllPopups}
             onAddPlace = {handleAddPlaceSubmit}
             isLoading = {isLoading}
           />
 
-          <PopupWithForm 
+          <PopupWithForm
             name = 'confirmation'
             title = 'Вы уверены?'
             onCardDelete = {handleCardDelete}
@@ -291,7 +291,7 @@ function App() {
           <ImagePopup
             card = {selectedCard}
             onClose = {closeAllPopups}
-          />  
+          />
         </div>
       </div>
     </CurrentUserContext.Provider>
