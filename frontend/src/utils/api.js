@@ -91,9 +91,9 @@ class Api {
 }
 
 const api = new Api({
-  baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-66',
+  baseUrl: 'https://api.hvatovspb.nomoredomainsicu.ru',
   headers: {
-    authorization: 'd7dcd0f2-c4b8-4c41-b858-1f8610d52fd1',
+    authorization: `Bearer ${localStorage.getItem('token')}`,
     'Content-Type': 'application/json'
   }
 });
