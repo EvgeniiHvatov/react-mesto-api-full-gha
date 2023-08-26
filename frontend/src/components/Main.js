@@ -22,15 +22,15 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, cards, onCardClick, onCa
       </section>
       <section className="places">
         <ul className="places__list">
-        {cards.map((card) => (
-          <Card 
+        {/* {cards.map((card) => (
+          <Card
           card = {card}
           key = {card._id}
           onCardClick = {onCardClick}
           onCardLike = {onCardLike}
           onCardDelete = {onCardDelete}
           />
-        ))}
+        ))} */}
         </ul>
       </section>
     </main>
