@@ -21,7 +21,7 @@
 
 ## Ссылки на проект
 
-IP 158.160.57.215
+IP 158.160.99.63
 
 Frontend [https://hvatovspb.nomoredomainsicu.ru](https://hvatovspb.nomoredomainsicu.ru)
 
