@@ -1,6 +1,7 @@
 class Api {
-  constructor({baseUrl}) {
-    this._baseUrl = baseUrl
+  constructor({baseUrl, headers}) {
+    this._baseUrl = baseUrl;
+    this._headers = headers;
   }
 
   _checkAnswer(res) {
@@ -14,10 +15,7 @@ class Api {
   getUserInfo() {
     const requestUrl = this._baseUrl + `/users/me`;
     return fetch(requestUrl, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkAnswer);
   }
@@ -25,10 +23,7 @@ class Api {
   getInitialCards() {
     const requestUrl = this._baseUrl + '/cards';
     return fetch(requestUrl, {
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkAnswer);
   }
@@ -41,10 +36,7 @@ class Api {
     const requestUrl = this._baseUrl + `/users/me`;
     return fetch(requestUrl, {
       method: 'PATCH',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
+      headers: this._headers,
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
@@ -54,10 +46,7 @@ class Api {
     const requestUrl = this._baseUrl + '/cards';
     return fetch(requestUrl, {
       method: 'POST',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
+      headers: this._headers,
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
@@ -67,10 +56,7 @@ class Api {
     const requestUrl = this._baseUrl + `/cards/${cardId}`;
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkAnswer);
   }
@@ -79,10 +65,7 @@ class Api {
     const requestUrl = this._baseUrl + `/cards/likes/${cardId}`;
     return fetch(requestUrl, {
       method: 'PUT',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkAnswer);
   }
@@ -91,10 +74,7 @@ class Api {
     const requestUrl = this._baseUrl + `/cards/likes/${cardId}`;
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      }
+      headers: this._headers,
     })
     .then(this._checkAnswer);
   }
@@ -103,10 +83,7 @@ class Api {
     const requestUrl = this._baseUrl + `/users/me/avatar`;
     return fetch(requestUrl, {
       method: 'PATCH',
-      headers: {
-        authorization: `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
-      },
+      headers: this._headers,
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
@@ -115,6 +92,10 @@ class Api {
 
 const api = new Api({
   baseUrl: 'https://api.hvatovspb.nomoredomainsicu.ru',
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('token')}`,
+    'Content-Type': 'application/json'
+  }
 });
 
 export default api;
