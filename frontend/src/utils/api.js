@@ -114,6 +114,7 @@ class Api {
   }
 }
 
-const api = new Api('http://localhost:3000');
+//const api = new Api('http://localhost:3000');
+const api = new Api('https://api.hvatovspb.nomoredomainsicu.ru');
 
 export default api;

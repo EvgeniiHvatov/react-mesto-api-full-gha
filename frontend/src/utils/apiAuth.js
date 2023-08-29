@@ -42,5 +42,6 @@ checkToken = (token) => {
 }
 }
 
-const apiAuth = new AuthApi('http://localhost:3000');
+//const apiAuth = new AuthApi('http://localhost:3000');
+const apiAuth = new AuthApi('https://api.hvatovspb.nomoredomainsicu.ru');
 export default apiAuth;
