@@ -18,11 +18,11 @@ module.exports.getUserById = (req, res, next) => {
 
   User
     .findById(userId)
-    .then((user) => {
-      if (!user) {
+    .then((users) => {
+      if (!users) {
         throw new NotFoundError('Пользователь по указанному _id не найден');
       }
-      res.send({ user });
+      res.send({ data: users });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -39,7 +39,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       if (!user) {
         return next(new NotFoundError('Пользователь по указанному _id не найден'));
       }
-      return res.send({ user });
+      return res.send(user);
     })
     .catch(next);
 };
@@ -126,7 +126,7 @@ module.exports.updateProfile = (req, res, next) => {
 
 module.exports.updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
-
+  // console.log(11, res);
   User.findByIdAndUpdate(
     req.user._id,
     { avatar },

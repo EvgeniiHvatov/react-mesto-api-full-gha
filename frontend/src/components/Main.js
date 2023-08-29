@@ -5,7 +5,6 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 function Main({onEditProfile, onAddPlace, onEditAvatar, cards, onCardClick, onCardLike, onCardDelete}) {
   const currentUser = React.useContext(CurrentUserContext);
 
-
   return (
     <main className="content">
       <section className="profile">
@@ -22,7 +21,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, cards, onCardClick, onCa
       </section>
       <section className="places">
         <ul className="places__list">
-        {/* {cards.map((card) => (
+        {cards.map((card) => (
           <Card
           card = {card}
           key = {card._id}
@@ -30,7 +29,7 @@ function Main({onEditProfile, onAddPlace, onEditAvatar, cards, onCardClick, onCa
           onCardLike = {onCardLike}
           onCardDelete = {onCardDelete}
           />
-        ))} */}
+        ))}
         </ul>
       </section>
     </main>

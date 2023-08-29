@@ -1,7 +1,6 @@
 class Api {
-  constructor({baseUrl, headers}) {
+  constructor(baseUrl) {
     this._baseUrl = baseUrl;
-    this._headers = headers;
   }
 
   _checkAnswer(res) {
@@ -15,7 +14,11 @@ class Api {
   getUserInfo() {
     const requestUrl = this._baseUrl + `/users/me`;
     return fetch(requestUrl, {
-      headers: this._headers,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
     })
     .then(this._checkAnswer);
   }
@@ -23,7 +26,10 @@ class Api {
   getInitialCards() {
     const requestUrl = this._baseUrl + '/cards';
     return fetch(requestUrl, {
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
     })
     .then(this._checkAnswer);
   }
@@ -36,7 +42,10 @@ class Api {
     const requestUrl = this._baseUrl + `/users/me`;
     return fetch(requestUrl, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
@@ -46,7 +55,10 @@ class Api {
     const requestUrl = this._baseUrl + '/cards';
     return fetch(requestUrl, {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
@@ -56,25 +68,34 @@ class Api {
     const requestUrl = this._baseUrl + `/cards/${cardId}`;
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
     })
     .then(this._checkAnswer);
   }
 
   addCardLike(cardId) {
-    const requestUrl = this._baseUrl + `/cards/likes/${cardId}`;
+    const requestUrl = this._baseUrl + `/cards/${cardId}/likes`;
     return fetch(requestUrl, {
       method: 'PUT',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
     })
     .then(this._checkAnswer);
   }
 
   deleteCardLike(cardId) {
-    const requestUrl = this._baseUrl + `/cards/likes/${cardId}`;
+    const requestUrl = this._baseUrl + `/cards/${cardId}/likes`;
     return fetch(requestUrl, {
       method: 'DELETE',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
     })
     .then(this._checkAnswer);
   }
@@ -83,19 +104,16 @@ class Api {
     const requestUrl = this._baseUrl + `/users/me/avatar`;
     return fetch(requestUrl, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${ localStorage.getItem('jwt') }`,
+      },
       body: JSON.stringify(body),
     })
     .then(this._checkAnswer);
   }
 }
 
-const api = new Api({
-  baseUrl: 'https://api.hvatovspb.nomoredomainsicu.ru',
-  headers: {
-    authorization: `Bearer ${localStorage.getItem('token')}`,
-    'Content-Type': 'application/json'
-  }
-});
+const api = new Api('http://localhost:3000');
 
 export default api;

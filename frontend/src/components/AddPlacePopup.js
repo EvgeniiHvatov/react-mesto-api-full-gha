@@ -30,7 +30,7 @@ function AddPlacePopup({isOpen, onClose, onAddPlace, isLoading}) {
   }
 
   return (
-    <PopupWithForm 
+    <PopupWithForm
             isOpen = {isOpen}
             onClose = {onClose}
             onSubmit = {handleSubmit}

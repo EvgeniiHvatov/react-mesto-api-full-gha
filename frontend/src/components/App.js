@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
-import {signUp, signIn, checkToken} from '../utils/apiAuth';
-
+import apiAuth from '../utils/apiAuth';
 import api from '../utils/api';
 import Header from './Header.js';
 import Main from './Main.js';
@@ -36,12 +35,14 @@ function App() {
   const navigate = useNavigate();
 
   function handleLogin(email, password) {
-    signIn(email, password)
-      .then((res) => {
-        localStorage.setItem('token', res.token);
-        setIsLoggedIn(true);
+    apiAuth.signIn(email, password)
+      .then(() => {
+        const jwt = localStorage.getItem('jwt');
+        if (jwt) {
         setEmailValue(email);
-        navigate("/");
+        setIsLoggedIn(true);
+        navigate('/')
+        }
       })
       .catch(() => {
         setPopupStatus({image: crossImg, message: 'Что-то пошло не так! Попробуйте еще раз.'});
@@ -50,7 +51,7 @@ function App() {
   };
 
   function handleRegister(email, password) {
-    signUp(email, password)
+    apiAuth.signUp(email, password)
       .then(() => {
         setPopupStatus({image: checkmarkImg, message: 'Вы успешно зарегистрировались!'});
         navigate("/signin");
@@ -60,10 +61,11 @@ function App() {
       })
       .finally(handleInfoTooltip);
   };
+//
 
   function handleLogOut() {
     setIsLoggedIn(false);
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     setEmailValue(null);
     navigate("/signin");
   };
@@ -72,25 +74,18 @@ function App() {
     setInfoTooltip(true);
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      checkToken(token)
-        .then((res) => {
-          if (res) {
-            setIsLoggedIn(true);
-            setEmailValue(res.data.email);
-            navigate('/');
-          }
-        })
-        .catch((err) => {
-          console.error(err);
-        });
+  useEffect( () => {
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      apiAuth.checkToken(jwt)
+        .then((res) => {setIsLoggedIn(true); setEmailValue(res.email); navigate('/') })
+        .catch((err) => {localStorage.removeItem('jwt');console.error(`Возникла ошибка в проверке токена, ${err}`)});
     }
-  }, []);
+}, [navigate, isLoggedIn]);
 
   useEffect(() => {
-    if (isLoggedIn){
+    const jwt = localStorage.getItem('jwt');
+    if (jwt){
     Promise.all([api.getUserInfo(), api.getInitialCards()])
       .then(([profileInfo, card]) => {
         setCurrentUser(profileInfo);
@@ -119,17 +114,17 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     if (!isLiked) {
-      api.addCardLike(card._id).then((newCard) => {
-        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      api.addCardLike(card._id).then((res) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? res.card : c)));
       }).catch((err) => {
         console.error(err);
       });
     } else {
-      api.deleteCardLike(card._id).then((newCard) => {
-        setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
+      api.deleteCardLike(card._id).then((res) => {
+        setCards((state) => state.map((c) => (c._id === card._id ? res.card : c)));
       }).catch((err) => {
         console.error(err);
       });
@@ -138,8 +133,8 @@ function App() {
 
   function handleUpdateAvatar(data) {
     setLoading(true);
-    api.updateProfileAvatar(data).then((newAvatar) => {
-      setCurrentUser(newAvatar);
+    api.updateProfileAvatar(data).then((res) => {
+      setCurrentUser(res.user);
       closeAllPopups();
     }).catch((err) => {
       console.error(err);
@@ -149,8 +144,8 @@ function App() {
   function handleUpdateUser(data) {
     setLoading(true);
     api.updateUserInfo(data)
-    .then((newUser) => {
-      setCurrentUser(newUser);
+    .then((res) => {
+      setCurrentUser(res);
       closeAllPopups();
     })
     .catch((err) => {
